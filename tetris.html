@@ -3,12 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tetris</title>
+<title>Tetris — Gothic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
 <style>
   :root {
     --cell: 30px;
-    --bg: #101018;
-    --grid: #1c1c2a;
+    --bg: #14100d;          /* dark stone */
+    --grid: #2a211a;
+    --blood: #8a1a1a;
+    --ember: #c0531e;
+    --gold: #b08d3c;
+    --bone: #d8cdbb;
+    --stone: #6b5d4a;
   }
   * { box-sizing: border-box; }
   body {
@@ -17,45 +25,80 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 28px;
-    background: #07070d;
-    color: #e8e8f0;
-    font-family: Consolas, "Courier New", monospace;
+    gap: 32px;
+    background:
+      radial-gradient(circle at 50% 0%, #1a1410 0%, #0a0807 70%),
+      #0a0807;
+    color: var(--bone);
+    font-family: "Cinzel", "Times New Roman", serif;
     user-select: none;
   }
   .stage { position: relative; }
   canvas {
     background: var(--bg);
-    border: 2px solid #2a2a3c;
-    border-radius: 6px;
+    border: 3px solid #3a2e22;
+    border-radius: 4px;
     display: block;
+    box-shadow:
+      0 0 0 1px #000,
+      0 0 28px rgba(138,26,26,.35),
+      inset 0 0 50px rgba(0,0,0,.7);
   }
-  .panel { width: 170px; }
+  .panel { width: 180px; }
   .panel h1 {
-    margin: 0 0 16px;
-    font-size: 28px;
-    letter-spacing: 2px;
-    color: #6cf;
+    margin: 0 0 4px;
+    font-family: "UnifrakturCook", "Cinzel", serif;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: 1px;
+    color: var(--blood);
+    text-shadow: 0 0 12px rgba(138,26,26,.7), 0 2px 2px #000;
   }
-  .stat { font-size: 15px; margin: 6px 0; }
-  .stat b { color: #fff; }
-  .label { color: #888; margin: 18px 0 6px; font-size: 13px; }
-  #next { background: var(--bg); border: 1px solid #2a2a3c; border-radius: 4px; }
-  .keys { margin-top: 22px; font-size: 11px; line-height: 1.7; color: #777; }
-  .keys span { color: #aac; }
+  .panel h1 + .sub {
+    color: var(--stone);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+  }
+  .stat { font-size: 15px; margin: 7px 0; letter-spacing: 1px; }
+  .stat b { color: var(--gold); font-weight: 700; }
+  .label {
+    color: var(--blood);
+    margin: 20px 0 8px;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #3a2e22;
+    padding-bottom: 4px;
+  }
+  #next {
+    background: var(--bg);
+    border: 1px solid #3a2e22;
+    border-radius: 4px;
+    box-shadow: inset 0 0 24px rgba(0,0,0,.7);
+  }
+  .keys { margin-top: 24px; font-size: 11px; line-height: 1.9; color: var(--stone); font-family: "Cinzel", serif; }
+  .keys span { color: var(--gold); }
   .overlay {
     position: absolute; inset: 0;
     display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,.72);
-    border-radius: 6px;
+    background: radial-gradient(circle, rgba(20,5,5,.78) 0%, rgba(0,0,0,.9) 100%);
+    border-radius: 4px;
     text-align: center;
   }
   .overlay.show { display: flex; }
-  .overlay h2 { margin: 0; font-size: 30px; }
-  .overlay p { color: #aaa; margin: 10px 0 0; }
+  .overlay h2 {
+    margin: 0;
+    font-family: "UnifrakturCook", serif;
+    font-size: 40px;
+    color: var(--blood);
+    text-shadow: 0 0 16px rgba(138,26,26,.8), 0 2px 3px #000;
+  }
+  .overlay p { color: var(--stone); margin: 14px 0 0; letter-spacing: 2px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -68,7 +111,8 @@
   </div>
 
   <div class="panel">
-    <h1>TETRIS</h1>
+    <h1>Tetris</h1>
+    <div class="sub">— Requiem —</div>
     <div class="stat">Score: <b id="score">0</b></div>
     <div class="stat">Lines: <b id="lines">0</b></div>
     <div class="stat">Level: <b id="level">1</b></div>
@@ -101,9 +145,10 @@ const SHAPES = {
   J: [[0,0],[0,1],[1,1],[2,1]],
   L: [[2,0],[0,1],[1,1],[2,1]],
 };
+// Darkened stained-glass / gemstone palette for a gothic mood.
 const COLORS = {
-  I:"#00f0f0", O:"#f0f000", T:"#a000f0", S:"#00f000",
-  Z:"#f00000", J:"#0000f0", L:"#f0a000",
+  I:"#3b6e6e", O:"#b08d3c", T:"#5a2470", S:"#4a6b32",
+  Z:"#8a1f1f", J:"#2c3a73", L:"#a85a1e",
 };
 const KINDS = Object.keys(SHAPES);
 
@@ -210,16 +255,24 @@ function restartTimer() {
 
 // --- Rendering ---
 function drawCell(c, x, y, color, size = CELL) {
+  const px = x * size, py = y * size;
   c.fillStyle = color;
-  c.fillRect(x * size, y * size, size, size);
-  c.strokeStyle = "#101018";
-  c.strokeRect(x * size, y * size, size, size);
+  c.fillRect(px, py, size, size);
+  // Carved-stone bevel: light top/left edge, dark bottom/right.
+  c.fillStyle = "rgba(255,240,210,.18)";
+  c.fillRect(px, py, size, 2);
+  c.fillRect(px, py, 2, size);
+  c.fillStyle = "rgba(0,0,0,.45)";
+  c.fillRect(px, py + size - 2, size, 2);
+  c.fillRect(px + size - 2, py, 2, size);
+  c.strokeStyle = "#0a0807";
+  c.strokeRect(px + 0.5, py + 0.5, size - 1, size - 1);
 }
 
 function draw() {
-  ctx.fillStyle = "#101018";
+  ctx.fillStyle = "#14100d";
   ctx.fillRect(0, 0, board.width, board.height);
-  ctx.strokeStyle = "#1c1c2a";
+  ctx.strokeStyle = "#2a211a";
   for (let i = 0; i <= COLS; i++) { ctx.beginPath(); ctx.moveTo(i*CELL,0); ctx.lineTo(i*CELL,ROWS*CELL); ctx.stroke(); }
   for (let j = 0; j <= ROWS; j++) { ctx.beginPath(); ctx.moveTo(0,j*CELL); ctx.lineTo(COLS*CELL,j*CELL); ctx.stroke(); }
 
@@ -241,7 +294,7 @@ function draw() {
   }
 
   // Next preview
-  nctx.fillStyle = "#101018";
+  nctx.fillStyle = "#14100d";
   nctx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
   for (const [cx, cy] of nextPiece.cells)
     drawCell(nctx, cx, cy, COLORS[nextPiece.kind]);
