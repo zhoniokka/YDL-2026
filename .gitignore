@@ -1,0 +1,10 @@
+# Secrets
+.env
+creds.txt
+
+# Generated images
+*.png
+
+# Python
+__pycache__/
+*.pyc
