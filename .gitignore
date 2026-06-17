@@ -14,3 +14,6 @@ __pycache__/
 
 # Anaconda project artifacts
 anaconda_projects/
+
+# Large data files (exceed GitHub's 100 MB limit; re-downloadable)
+day3/911.csv
