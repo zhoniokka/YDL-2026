@@ -8,9 +8,3 @@ creds.txt
 # Python
 __pycache__/
 *.pyc
-
-# Jupyter
-.ipynb_checkpoints/
-
-# Anaconda project artifacts
-anaconda_projects/
