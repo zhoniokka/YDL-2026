@@ -1,0 +1,8 @@
+# Фирменная тема Yessenov Foundation.
+# Все цвета вынесены сюда — правьте здесь, чтобы поменять оформление приложения.
+[theme]
+primaryColor = "#0B3D91"               # основной (тёмно-синий) — замените на точный бренд-цвет
+backgroundColor = "#FFFFFF"            # фон основной области
+secondaryBackgroundColor = "#F2F5FA"  # фон сайдбара и «пузырей»
+textColor = "#1A1A1A"                  # цвет текста
+font = "sans serif"

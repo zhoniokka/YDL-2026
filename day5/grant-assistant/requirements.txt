@@ -1,0 +1,8 @@
+streamlit
+requests
+beautifulsoup4
+trafilatura
+sentence-transformers
+faiss-cpu
+python-dotenv
+mailersend

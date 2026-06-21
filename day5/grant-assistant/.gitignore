@@ -1,0 +1,24 @@
+# Secrets — НИКОГДА не коммитим
+.env
+.streamlit/secrets.toml
+
+# Виртуальное окружение
+venv/
+.venv/
+
+# Runtime-логи
+*.log
+
+# Python кэш
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Построенный индекс (генерируется локально)
+data/index/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
